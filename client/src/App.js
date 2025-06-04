@@ -1,21 +1,52 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Matches from './pages/Matches';
-
-
-<div className="text-3xl font-bold underline text-blue-500">
-  Tailwind is working!
-</div>
-
+// Future routes
+// import Home from './pages/Home';
+// import Teams from './pages/Teams';
+// import MatchDetail from './pages/MatchDetail';
 
 function App() {
+  const [darkMode, setDarkMode] = useState(() => {
+    // Load saved theme from localStorage
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/matches" element={<Matches />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+        {/* Top Nav Placeholder (optional) */}
+        <header className="p-4 shadow-md bg-white dark:bg-slate-800 flex justify-between items-center">
+          <h1 className="text-lg font-bold">🏏 SportsHub</h1>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="bg-gray-300 dark:bg-gray-700 p-2 rounded-md"
+          >
+            {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+          </button>
+        </header>
+
+        {/* Page Routes */}
+        <main className="p-4">
+          <Routes>
+            <Route path="/matches" element={<Matches />} />
+            {/* <Route path="/" element={<Home />} /> */}
+            {/* <Route path="/teams" element={<Teams />} /> */}
+            {/* <Route path="/match/:id" element={<MatchDetail />} /> */}
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
