@@ -1,4 +1,4 @@
-const mockLiveMatches = [
+const liveMatches = [
     {
       match_id: "match123",
       teams: { home: "India", away: "Australia" },
@@ -10,12 +10,12 @@ const mockLiveMatches = [
     {
       match_id: "match456",
       teams: { home: "England", away: "New Zealand" },
-      scores: { home: "212/3", away: "199/9" },
+      scores: { home: "212/3", away: "195/9" },
       overs: "19.4",
       status: "LIVE",
       win_predictor: { "England": 72, "New Zealand": 28 },
     },
   ];
   
-  export default mockLiveMatches;
+  module.exports = liveMatches;
   

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Matches from './pages/Matches';
-// Future routes
-// import Home from './pages/Home';
-// import Teams from './pages/Teams';
-// import MatchDetail from './pages/MatchDetail';
+import Matchdetail from './pages/Matchdetail';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -40,9 +37,7 @@ function App() {
         <main className="p-4">
           <Routes>
             <Route path="/matches" element={<Matches />} />
-            {/* <Route path="/" element={<Home />} /> */}
-            {/* <Route path="/teams" element={<Teams />} /> */}
-            {/* <Route path="/match/:id" element={<MatchDetail />} /> */}
+            <Route path="/match/:id" element={<Matchdetail />} />
           </Routes>
         </main>
       </div>
