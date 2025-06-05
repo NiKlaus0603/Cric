@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Matches from './pages/Matches';
 import Matchdetail from './pages/Matchdetail';
+import Players from './pages/Players';
+import Teams from './pages/Teams';
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -38,6 +41,8 @@ function App() {
           <Routes>
             <Route path="/matches" element={<Matches />} />
             <Route path="/match/:id" element={<Matchdetail />} />
+            <Route path="/players" element={<Players />} />
+            <Route path="/teams" element={<Teams />} />
           </Routes>
         </main>
       </div>

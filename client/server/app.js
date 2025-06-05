@@ -1,15 +1,21 @@
-import express, { json } from 'express';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(json());
+app.use(express.json());
 
 // Routes
-import liveMatchRoutes from './routes/LiveMatches';
-import pollRoutes from './routes/polls';
+const liveMatchRoutes = require('./routes/LiveMatches');
+const pollRoutes = require('./routes/polls');
+const playerRoutes = require('./routes/players');
+const teamRoutes = require('./routes/teams');
+
+app.use('/api/players', playerRoutes);
+app.use('/api/teams', teamRoutes);
 app.use('/api/polls', pollRoutes);
 app.use('/api/live-matches', liveMatchRoutes);
 
-export default app;
+module.exports = app;

@@ -1,0 +1,21 @@
+[
+    {
+      "id": "t1",
+      "name": "India",
+      "logo": "/images/india.png",
+      "captain": "Rohit Sharma",
+      "recentForm": ["W", "W", "L", "W", "W"],
+      "netRunRate": "+1.523",
+      "rank": 1
+    },
+    {
+      "id": "t2",
+      "name": "Australia",
+      "logo": "/images/australia.png",
+      "captain": "Pat Cummins",
+      "recentForm": ["W", "L", "L", "W", "W"],
+      "netRunRate": "+0.987",
+      "rank": 3
+    }
+  ]
+  

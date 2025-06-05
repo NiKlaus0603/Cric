@@ -1,0 +1,25 @@
+[
+    {
+      "id": "p1",
+      "name": "Virat Kohli",
+      "team": "India",
+      "role": "Batsman",
+      "runs": 7654,
+      "wickets": 0,
+      "form": ["50", "87", "32", "101", "70"],
+      "popularity": 91,
+      "image": "/images/virat.png"
+    },
+    {
+      "id": "p2",
+      "name": "Pat Cummins",
+      "team": "Australia",
+      "role": "Bowler",
+      "runs": 389,
+      "wickets": 213,
+      "form": ["W", "W", "D", "W", "L"],
+      "popularity": 76,
+      "image": "/images/cummins.png"
+    }
+  ]
+  
