@@ -4,6 +4,8 @@ import Matches from './pages/Matches';
 import Matchdetail from './pages/Matchdetail';
 import Players from './pages/Players';
 import Teams from './pages/Teams';
+import News from './pages/News';
+
 
 
 function App() {
@@ -43,6 +45,7 @@ function App() {
             <Route path="/match/:id" element={<Matchdetail />} />
             <Route path="/players" element={<Players />} />
             <Route path="/teams" element={<Teams />} />
+            <Route path="/news" element={<News />} />
           </Routes>
         </main>
       </div>

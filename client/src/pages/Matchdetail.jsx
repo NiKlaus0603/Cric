@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import RunRateChart from '../components/Insights/RunRateChart';
 import WicketZone from '../components/Insights/WicketZone';
 import BowlerLengthMap from '../components/Insights/BowlerLengthMap';
+import { galleryByMatch } from '../data/mockGallery';
+import ImageGallery from '../components/Media/ImageGallery';
+
 
 const MatchDetail = () => {
   const { id } = useParams();
@@ -323,6 +326,8 @@ const MatchDetail = () => {
           )}
         </div>
       )}
+      {/* 🖼️ Image Gallery */}
+      {galleryByMatch[id] && <ImageGallery images={galleryByMatch[id]} />}
     </div>
   );
 };
