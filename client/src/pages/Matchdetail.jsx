@@ -15,12 +15,14 @@ const MatchDetail = () => {
   const [insights, setInsights] = useState(null);
   const [insightLoading, setInsightLoading] = useState(true);
 
-  const [prediction, setPrediction] = useState({
-    name: '',
-    batsman: '',
-    bowler: '',
-  });
+  const [prediction, setPrediction] = useState({ name: '', batsman: '', bowler: '' });
   const [predictionSubmitted, setPredictionSubmitted] = useState(false);
+
+  const [comments, setComments] = useState([]);
+  const [commentInput, setCommentInput] = useState({ name: '', text: '' });
+  const [commentLoading, setCommentLoading] = useState(false);
+
+  const [pollResults, setPollResults] = useState(null);
 
   // Fetch match details
   useEffect(() => {
@@ -56,7 +58,34 @@ const MatchDetail = () => {
     fetchInsights();
   }, [id]);
 
-  // Submit fan prediction
+  // Fetch comments
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await fetch(`http://localhost:9091/api/comments/${id}`);
+        const data = await res.json();
+        setComments(data);
+      } catch (err) {
+        console.error("Failed to load comments", err);
+      }
+    };
+    fetchComments();
+  }, [id]);
+
+  // Fetch poll results (for archive)
+  useEffect(() => {
+    const fetchPollResults = async () => {
+      try {
+        const res = await fetch(`http://localhost:9091/api/polls/${id}`);
+        const data = await res.json();
+        setPollResults(data);
+      } catch (err) {
+        console.error("Failed to load poll results", err);
+      }
+    };
+    fetchPollResults();
+  }, [id]);
+
   const handlePredictionSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -74,6 +103,32 @@ const MatchDetail = () => {
       if (data.message) setPredictionSubmitted(true);
     } catch (err) {
       console.error('Prediction error:', err);
+    }
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!commentInput.name || !commentInput.text) return;
+    try {
+      setCommentLoading(true);
+      await fetch('http://localhost:9091/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          matchId: match.match_id,
+          name: commentInput.name,
+          text: commentInput.text,
+        })
+      });
+
+      const res = await fetch(`http://localhost:9091/api/comments/${id}`);
+      const updated = await res.json();
+      setComments(updated);
+      setCommentInput({ name: '', text: '' });
+    } catch (err) {
+      console.error('Failed to post comment:', err);
+    } finally {
+      setCommentLoading(false);
     }
   };
 
@@ -140,12 +195,9 @@ const MatchDetail = () => {
         </div>
       </div>
 
-      {/* 🎮 Fan Prediction Form */}
+      {/* Prediction Form */}
       {match.status === 'UPCOMING' && !predictionSubmitted && (
-        <form
-          onSubmit={handlePredictionSubmit}
-          className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md mb-6"
-        >
+        <form onSubmit={handlePredictionSubmit} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md mb-6">
           <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Your Prediction</h3>
           <div className="grid gap-4">
             <input
@@ -178,10 +230,7 @@ const MatchDetail = () => {
               <option value="Jasprit Bumrah">Jasprit Bumrah</option>
               <option value="Zampa">Zampa</option>
             </select>
-            <button
-              type="submit"
-              className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
-            >
+            <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
               Submit Prediction
             </button>
           </div>
@@ -194,17 +243,85 @@ const MatchDetail = () => {
         </div>
       )}
 
-      {/* Match Insights */}
+      {/* Insights */}
       {insightLoading ? (
         <div className="text-center text-gray-500 mt-6">Loading match insights...</div>
       ) : insights ? (
         <>
-          <RunRateChart data={insights.runRate} />
-          <WicketZone wickets={insights.wickets} />
-          <BowlerLengthMap deliveries={insights.deliveries} />
+          {Array.isArray(insights.runRate) && <RunRateChart data={insights.runRate} />}
+          {Array.isArray(insights.wickets) && <WicketZone wickets={insights.wickets} />}
+          {Array.isArray(insights.deliveries) && <BowlerLengthMap deliveries={insights.deliveries} />}
         </>
       ) : (
         <div className="text-center text-red-500 mt-6">No insights available for this match.</div>
+      )}
+
+      {/* Comment Section */}
+      <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md mt-6">
+        <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Match Reactions</h3>
+        <form onSubmit={handleCommentSubmit} className="mb-4 space-y-3">
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={commentInput.name}
+            onChange={(e) => setCommentInput({ ...commentInput, name: e.target.value })}
+            className="w-full px-4 py-2 rounded border dark:bg-slate-900 dark:text-white"
+            required
+          />
+          <textarea
+            placeholder="What do you think?"
+            value={commentInput.text}
+            onChange={(e) => setCommentInput({ ...commentInput, text: e.target.value })}
+            className="w-full px-4 py-2 rounded border dark:bg-slate-900 dark:text-white"
+            rows={3}
+            required
+          />
+          <button
+            type="submit"
+            disabled={commentLoading}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            {commentLoading ? 'Posting...' : 'Post Comment'}
+          </button>
+        </form>
+        <div className="space-y-4">
+          {comments.length === 0 ? (
+            <p className="text-sm text-gray-500">No comments yet. Be the first to react!</p>
+          ) : (
+            comments.map((c, i) => (
+              <div key={i} className="border-t pt-2 text-sm">
+                <span className="font-semibold text-gray-900 dark:text-white">{c.name}</span>
+                <span className="text-gray-500 text-xs ml-2">{new Date(c.timestamp).toLocaleString()}</span>
+                <p className="text-gray-700 dark:text-gray-300 mt-1">{c.text}</p>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Poll Archive */}
+      {match.status === "RESULT" && pollResults && (
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md mt-6">
+          <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">📊 Fan Poll Archive</h3>
+          {pollResults.total === 0 ? (
+            <p className="text-gray-500">No votes were submitted for this match.</p>
+          ) : (
+            <>
+              {Object.keys(pollResults.votes).map((team) => {
+                const percent = Math.round((pollResults.votes[team] / pollResults.total) * 100);
+                return (
+                  <div key={team} className="mb-3">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mb-1">{team}: {percent}%</p>
+                    <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-600" style={{ width: `${percent}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+              <p className="text-xs text-gray-500 mt-2">Total Votes: {pollResults.total}</p>
+            </>
+          )}
+        </div>
       )}
     </div>
   );

@@ -14,7 +14,9 @@ const playerRoutes = require('./routes/players');
 const teamRoutes = require('./routes/teams');
 const insightRoutes = require('./routes/insights');
 const predictionRoutes = require('./routes/predictions');
+const commentRoutes = require('./routes/comments');
 
+app.use('/api/comments', commentRoutes);
 app.use('/api/predictions', predictionRoutes);
 app.use('/api/insights', insightRoutes);
 app.use('/api/players', playerRoutes);
