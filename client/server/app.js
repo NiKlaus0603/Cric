@@ -13,7 +13,9 @@ const pollRoutes = require('./routes/polls');
 const playerRoutes = require('./routes/players');
 const teamRoutes = require('./routes/teams');
 const insightRoutes = require('./routes/insights');
+const predictionRoutes = require('./routes/predictions');
 
+app.use('/api/predictions', predictionRoutes);
 app.use('/api/insights', insightRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/teams', teamRoutes);

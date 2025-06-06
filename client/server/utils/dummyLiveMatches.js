@@ -3,7 +3,7 @@ const liveMatches = [
     match_id: "match123",
     format: "T20",
     league: "World Cup",
-    status: "LIVE",
+    status: "UPCOMING",
     teams: { home: "India", away: "Australia" },
     scores: { home: "178/4", away: "154/6" },
     overs: "17.2",
