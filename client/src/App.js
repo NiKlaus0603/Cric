@@ -5,6 +5,13 @@ import Matchdetail from './pages/Matchdetail';
 import Players from './pages/Players';
 import Teams from './pages/Teams';
 import News from './pages/News';
+import Admin from './pages/Admin';
+import Login from './pages/Login';
+import Home from './pages/Home';
+
+
+
+
 
 
 
@@ -46,6 +53,9 @@ function App() {
             <Route path="/players" element={<Players />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/news" element={<News />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </main>
       </div>
