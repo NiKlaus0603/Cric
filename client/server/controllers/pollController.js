@@ -1,29 +1,30 @@
-// In-memory poll data
-let polls = {};
+const Poll = require('../models/Poll');
 
-const vote = (req, res) => {
+const votePoll = async (req, res) => {
   const { matchId, team } = req.body;
-
-  if (!polls[matchId]) {
-    polls[matchId] = { votes: {}, total: 0 };
+  if (!matchId || !team) {
+    return res.status(400).json({ error: 'matchId and team are required' });
   }
 
-  const matchPoll = polls[matchId];
-  matchPoll.votes[team] = (matchPoll.votes[team] || 0) + 1;
-  matchPoll.total += 1;
-
-  res.status(200).json({ message: 'Vote recorded', results: matchPoll });
-};
-
-const getResults = (req, res) => {
-  const matchId = req.params.matchId;
-  const poll = polls[matchId];
+  let poll = await Poll.findOne({ matchId });
 
   if (!poll) {
-    return res.json({ votes: {}, total: 0 });
+    poll = new Poll({ matchId, votes: new Map(), total: 0 });
   }
 
-  res.json(poll);
+  const currentVotes = poll.votes.get(team) || 0;
+  poll.votes.set(team, currentVotes + 1);
+  poll.total += 1;
+
+  await poll.save();
+
+  res.json({ message: 'Vote counted!', poll });
 };
 
-module.exports = { vote, getResults };
+const getPollResults = async (req, res) => {
+  const { matchId } = req.params;
+  const poll = await Poll.findOne({ matchId });
+  res.json(poll || { votes: {}, total: 0 });
+};
+
+module.exports = { votePoll, getPollResults };

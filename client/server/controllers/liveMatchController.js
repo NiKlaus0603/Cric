@@ -1,25 +1,26 @@
-const liveMatches = require('../utils/dummyLiveMatches');
+const Match = require('../models/match');
 
-const getLiveMatches = (req, res) => {
-  const { format, team, status } = req.query;
+const getLiveMatches = async (req, res) => {
+  try {
+    const { format, team, status } = req.query;
 
-  let filtered = [...liveMatches];
+    const query = {};
 
-  if (format) {
-    filtered = filtered.filter(match => match.format === format);
+    if (status) query.status = status;
+    if (format) query.format = format;
+    if (team) {
+      query.$or = [
+        { 'teams.home': team },
+        { 'teams.away': team }
+      ];
+    }
+
+    const matches = await Match.find(query).sort({ date: -1 });
+    res.json(matches);
+  } catch (err) {
+    console.error('❌ Error fetching matches:', err);
+    res.status(500).json({ error: 'Server error' });
   }
-
-  if (team) {
-    filtered = filtered.filter(match =>
-      match.teams.home === team || match.teams.away === team
-    );
-  }
-
-  if (status) {
-    filtered = filtered.filter(match => match.status === status);
-  }
-
-  res.status(200).json(filtered);
 };
 
 module.exports = { getLiveMatches };

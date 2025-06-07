@@ -1,18 +1,17 @@
-const predictions = require('../utils/mockPredictions');
+const Prediction = require('../models/Prediction');
 
-const submitPrediction = (req, res) => {
+const submitPrediction = async (req, res) => {
   const { matchId, name, batsman, bowler } = req.body;
+  if (!matchId || !name || !batsman || !bowler)
+    return res.status(400).json({ error: 'Missing fields' });
 
-  if (!predictions[matchId]) predictions[matchId] = [];
-
-  predictions[matchId].push({ name, batsman, bowler });
-
-  res.status(200).json({ message: 'Prediction saved!' });
+  await Prediction.create({ matchId, name, batsman, bowler });
+  res.json({ message: 'Prediction saved!' });
 };
 
-const getPredictions = (req, res) => {
-  const matchId = req.params.matchId;
-  res.json(predictions[matchId] || []);
+const getPredictions = async (req, res) => {
+  const predictions = await Prediction.find({ matchId: req.params.matchId });
+  res.json(predictions);
 };
 
 module.exports = { submitPrediction, getPredictions };

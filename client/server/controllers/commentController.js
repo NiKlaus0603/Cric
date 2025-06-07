@@ -1,25 +1,17 @@
-const comments = require('../utils/mockComments');
+const Comment = require('../models/Comment');
 
-const postComment = (req, res) => {
+const postComment = async (req, res) => {
   const { matchId, name, text } = req.body;
-  if (!matchId || !name || !text) {
-    return res.status(400).json({ error: 'Missing fields' });
-  }
+  if (!matchId || !name || !text) return res.status(400).json({ error: 'Missing fields' });
 
-  if (!comments[matchId]) comments[matchId] = [];
-
-  comments[matchId].push({
-    name,
-    text,
-    timestamp: new Date().toISOString(),
-  });
-
-  res.status(200).json({ message: 'Comment added!' });
+  const comment = await Comment.create({ matchId, name, text });
+  res.status(201).json(comment);
 };
 
-const getComments = (req, res) => {
+const getComments = async (req, res) => {
   const matchId = req.params.matchId;
-  res.json(comments[matchId] || []);
+  const comments = await Comment.find({ matchId }).sort({ timestamp: -1 });
+  res.json(comments);
 };
 
 module.exports = { postComment, getComments };
