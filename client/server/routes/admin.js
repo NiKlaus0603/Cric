@@ -5,5 +5,10 @@ const verifyToken = require('../middleware/auth'); // 🧠 Place the middleware 
 
 router.post('/matches', verifyToken, addMatch);  // 🔐 Protected
 router.get('/matches', verifyToken, getAllMatches); // Optional: Protect read too
+router.put('/matches/:id', verifyToken, async (req, res) => {
+    const updated = await Match.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  });
+  
 
 module.exports = router;

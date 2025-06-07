@@ -29,7 +29,9 @@ const predictionRoutes = require('./routes/predictions');
 const commentRoutes = require('./routes/comments');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
+const mediaRoutes = require('./routes/media');
 
+app.use('/api/media', mediaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/comments', commentRoutes);
