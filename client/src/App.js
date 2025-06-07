@@ -8,6 +8,7 @@ import News from './pages/News';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import { Link } from 'react-router-dom';
 
 
 
@@ -36,7 +37,9 @@ function App() {
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
         {/* Top Nav Placeholder (optional) */}
         <header className="p-4 shadow-md bg-white dark:bg-slate-800 flex justify-between items-center">
-          <h1 className="text-lg font-bold">🏏 SportsHub</h1>
+        <Link to="/">
+  <h1 className="text-lg font-bold cursor-pointer hover:underline">🏏 SportsHub</h1>
+</Link>
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="bg-gray-300 dark:bg-gray-700 p-2 rounded-md"
