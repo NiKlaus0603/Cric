@@ -42,7 +42,7 @@ const LiveMatchCard = ({ match }) => {
   return (
     <motion.div
       whileHover={{ scale: 1.03 }}
-      className="bg-white dark:bg-slate-800 bg-opacity-80 dark:bg-opacity-70 backdrop-blur-lg p-4 rounded-2xl shadow-xl transition-all"
+      className="w-full sm:w-[380px] md:w-[400px] mx-auto"
       onClick={() => navigate(`/match/${match_id}`)}
     >
       {/* Match Info */}

@@ -1,23 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+require('dotenv').config();
 
 const app = express();
 
-// ✅ MongoDB Atlas Connection
-const mongoURI = 'mongodb://root:t8nvM5VtdRLamlSv@ac-40ztbch-shard-00-00.faybwjq.mongodb.net:27017,ac-40ztbch-shard-00-01.faybwjq.mongodb.net:27017,ac-40ztbch-shard-00-02.faybwjq.mongodb.net:27017/?ssl=true&replicaSet=atlas-yat5wm-shard-0&authSource=admin&retryWrites=true&w=majority&appName=Cluster0';
-
-mongoose.connect(mongoURI, {
+// ✅ MongoDB Atlas Connection (using .env)
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 })
   .then(() => console.log('✅ Connected to MongoDB Atlas'))
-  .catch(err => console.error('❌ MongoDB connection failed:', err.message));
-
+  .catch((err) => console.error('❌ MongoDB connection failed:', err.message));
 
 // ✅ Middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 // ✅ Routes
 const liveMatchRoutes = require('./routes/LiveMatches');
@@ -30,12 +30,7 @@ const commentRoutes = require('./routes/comments');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const mediaRoutes = require('./routes/media');
-const playerRoutes = require('./routes/players');
-const teamRoutes = require('./routes/teams');
-app.use('/api/players', playerRoutes);
 
-app.use('/api/teams', teamRoutes);
-app.use('/api/media', mediaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/comments', commentRoutes);
@@ -43,6 +38,7 @@ app.use('/api/predictions', predictionRoutes);
 app.use('/api/insights', insightRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/media', mediaRoutes);
 app.use('/api/polls', pollRoutes);
 app.use('/api/live-matches', liveMatchRoutes);
 
