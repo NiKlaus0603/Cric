@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getPlayers } = require('../controllers/playersController');
+const { addPlayer } = require('../controllers/playerTeamController');
+const verifyToken = require('../middleware/verifyToken');
 
-router.get('/', getPlayers);
+router.post('/', verifyToken, addPlayer);
 
 module.exports = router;

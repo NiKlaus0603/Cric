@@ -30,7 +30,11 @@ const commentRoutes = require('./routes/comments');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const mediaRoutes = require('./routes/media');
+const playerRoutes = require('./routes/players');
+const teamRoutes = require('./routes/teams');
+app.use('/api/players', playerRoutes);
 
+app.use('/api/teams', teamRoutes);
 app.use('/api/media', mediaRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);

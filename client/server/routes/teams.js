@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getTeams } = require('../controllers/teamsController');
+const { addTeam } = require('../controllers/playerTeamController');
+const verifyToken = require('../middleware/verifyToken');
 
-router.get('/', getTeams);
+router.post('/', verifyToken, addTeam);
 
 module.exports = router;

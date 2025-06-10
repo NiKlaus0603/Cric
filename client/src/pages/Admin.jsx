@@ -118,7 +118,7 @@ const Admin = () => {
         </button>
       </div>
 
-      {/* Match Upload Form */}
+      {/* Match Form */}
       <form onSubmit={handleSubmit} className="grid gap-4 bg-white dark:bg-slate-800 p-6 rounded-xl shadow mb-8">
         <input type="text" placeholder="Match ID" value={match.match_id}
           onChange={(e) => setMatch({ ...match, match_id: e.target.value })}
@@ -215,7 +215,7 @@ const Admin = () => {
         )}
       </ul>
 
-      {/* GALLERY UPLOAD */}
+      {/* Gallery Form */}
       <h3 className="text-xl font-semibold mt-10 mb-3 text-gray-800 dark:text-white">🖼 Upload Match Gallery Image</h3>
       <form
         onSubmit={async (e) => {
@@ -246,7 +246,7 @@ const Admin = () => {
         </button>
       </form>
 
-      {/* NEWS UPLOAD */}
+      {/* News Form */}
       <h3 className="text-xl font-semibold mt-10 mb-3 text-gray-800 dark:text-white">📰 Post News Article</h3>
       <form
         onSubmit={async (e) => {
@@ -275,6 +275,79 @@ const Admin = () => {
       >
         <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
           ➕ Add News Article
+        </button>
+      </form>
+
+      {/* Player Form */}
+      <h3 className="text-xl font-semibold mt-10 mb-3 text-gray-800 dark:text-white">👤 Add New Player</h3>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const name = prompt("Player name?");
+          const role = prompt("Role (batsman/bowler/allrounder)?");
+          const image = prompt("Image URL?");
+          const runs = prompt("Runs?");
+          const wickets = prompt("Wickets?");
+          const matches = prompt("Matches?");
+
+          const res = await fetch('http://localhost:9091/api/players', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              name,
+              role,
+              image,
+              stats: { runs, wickets, matches }
+            })
+          });
+
+          if (res.ok) {
+            alert("✅ Player added!");
+            setMessage("Player Updated");
+          } else {
+            alert("❌ Failed to add player");
+          }
+        }}
+      >
+        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          ➕ Add Player
+        </button>
+      </form>
+
+      {/* Team Form */}
+      <h3 className="text-xl font-semibold mt-10 mb-3 text-gray-800 dark:text-white">🏏 Add New Team</h3>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const name = prompt("Team name?");
+          const logo = prompt("Logo URL?");
+          const captain = prompt("Captain name?");
+          const nrr = prompt("Net Run Rate?");
+          const wins = prompt("Wins?");
+          const losses = prompt("Losses?");
+
+          const res = await fetch('http://localhost:9091/api/teams', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, logo, captain, nrr, wins, losses })
+          });
+
+          if (res.ok) {
+            alert("✅ Team added!");
+            setMessage("Team Updated");
+          } else {
+            alert("❌ Failed to add team");
+          }
+        }}
+      >
+        <button type="submit" className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
+          ➕ Add Team
         </button>
       </form>
     </div>
