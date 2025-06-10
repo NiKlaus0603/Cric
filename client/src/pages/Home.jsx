@@ -79,9 +79,26 @@ const Home = () => {
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🧠 Today’s Cricket IQ</h2>
         <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow text-center">
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">What’s the highest team total in T20 history?</p>
+          <a href="iq">
           <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Play Quiz</button>
+          </a>
         </div>
       </section>
+      {/* 🎮 Fantasy League */}
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🎮 Fantasy League</h2>
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+            Pick your dream team of 5 players and test your cricket instincts!
+          </p>
+        <a href="/fantasy">
+          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            Start Building Your Team
+          </button>
+        </a>
+        </div>
+      </section>
+
 
       {/* 🖼️ Gallery Preview */}
       <section>

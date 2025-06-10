@@ -8,12 +8,10 @@ import News from './pages/News';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import CricketIQ from './pages/CricketIQ';
+import FantasyTeam from './pages/FantasyTeam';
 import { Link } from 'react-router-dom';
-
-
-
-
-
 
 
 function App() {
@@ -59,6 +57,9 @@ function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/iq" element={<CricketIQ />} />
+            <Route path="/fantasy" element={<FantasyTeam />} />
           </Routes>
         </main>
       </div>
