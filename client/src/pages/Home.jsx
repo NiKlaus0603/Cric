@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const res = await fetch('http://localhost:9091/api/live-matches');
+        const res = await fetch('/api/live-db'); // ✅ fixed URL
         const data = await res.json();
 
         setLiveMatches(data.filter(m => m.status === 'LIVE').slice(0, 2));
@@ -41,13 +41,13 @@ const Home = () => {
                 className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow hover:scale-[1.01] transition"
               >
                 <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
-                  <span>{match.teams.home}</span>
-                  <span>{match.overs} overs</span>
-                  <span>{match.teams.away}</span>
+                  <span>{match.teams?.[0] || 'Team A'}</span>
+                  <span>{match.score ? `${match.score.o} ov` : '–'}</span>
+                  <span>{match.teams?.[1] || 'Team B'}</span>
                 </div>
                 <div className="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-300">
-                  <span>{match.scores.home}</span>
-                  <span>{match.scores.away}</span>
+                  <span>{match.score ? `${match.score.r}/${match.score.w}` : '–'}</span>
+                  <span>-</span>
                 </div>
               </Link>
             ))
@@ -66,7 +66,7 @@ const Home = () => {
               className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow hover:scale-[1.01] transition"
             >
               <p className="font-semibold text-gray-800 dark:text-white">
-                {match.teams.home} vs {match.teams.away}
+                {(match.teams?.[0] || 'Team A')} vs {(match.teams?.[1] || 'Team B')}
               </p>
               <p className="text-sm text-gray-500">{match.format}</p>
             </Link>
@@ -80,10 +80,11 @@ const Home = () => {
         <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow text-center">
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">What’s the highest team total in T20 history?</p>
           <a href="iq">
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Play Quiz</button>
+            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Play Quiz</button>
           </a>
         </div>
       </section>
+
       {/* 🎮 Fantasy League */}
       <section className="mt-8">
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">🎮 Fantasy League</h2>
@@ -91,14 +92,13 @@ const Home = () => {
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
             Pick your dream team of 5 players and test your cricket instincts!
           </p>
-        <a href="/fantasy">
-          <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-            Start Building Your Team
-          </button>
-        </a>
+          <a href="/fantasy">
+            <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+              Start Building Your Team
+            </button>
+          </a>
         </div>
       </section>
-
 
       {/* 🖼️ Gallery Preview */}
       <section>

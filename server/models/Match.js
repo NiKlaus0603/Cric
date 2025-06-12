@@ -1,19 +1,66 @@
 const mongoose = require('mongoose');
 
-const MatchSchema = new mongoose.Schema({
-  match_id: { type: String, required: true, unique: true },
-  format: { type: String, enum: ['T20', 'ODI', 'TEST'], required: true },
-  status: { type: String, enum: ['UPCOMING', 'LIVE', 'RESULT'], required: true },
-  teams: {
-    home: { type: String, required: true },
-    away: { type: String, required: true },
+const matchSchema = new mongoose.Schema({
+  match_id: {
+    type: Number,
+    required: true,
+    unique: true
   },
-  scores: {
-    home: { type: String, default: '' }, // e.g. "120/3"
-    away: { type: String, default: '' },
+  name: String,
+
+  teams: [String], // e.g., ['India', 'Australia']
+
+  format: String,  // T20, ODI, TEST, etc.
+  status: String,  // LIVE, UPCOMING, FINISHED
+
+  score: {
+    r: Number,
+    w: Number,
+    o: String
   },
-  overs: { type: String, default: '' }, // e.g. "13.2"
-  date: { type: Date, default: Date.now },
+
+  date: {
+    type: Date,
+    required: false // ✅ Allow null for fallback API or failed parse
+  },
+
+  note: String, // e.g., "India won by 5 wickets"
+  toss_winner: String,
+  winner: String,
+  venue_id: Number,
+
+  league: {
+    id: Number,
+    name: String,
+    code: String,
+    image_path: String
+  },
+
+  teams_meta: {
+    local: {
+      id: Number,
+      name: String,
+      code: String,
+      image_path: String
+    },
+    visitor: {
+      id: Number,
+      name: String,
+      code: String,
+      image_path: String
+    }
+  },
+
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+
+  source: {
+    type: String,
+    enum: ['SportMonks', 'Cricbuzz', 'Unknown'],
+    default: 'SportMonks'
+  }
 });
 
-module.exports = mongoose.model('Match', MatchSchema);
+module.exports = mongoose.model('Match', matchSchema);
